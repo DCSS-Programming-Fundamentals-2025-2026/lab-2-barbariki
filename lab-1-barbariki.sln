@@ -1,0 +1,24 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.5.2.0
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab-1-barbariki", "lab-1-barbariki.csproj", "{B18345CA-C7DC-0E84-D8BD-E5A64B3A9875}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{B18345CA-C7DC-0E84-D8BD-E5A64B3A9875}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B18345CA-C7DC-0E84-D8BD-E5A64B3A9875}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B18345CA-C7DC-0E84-D8BD-E5A64B3A9875}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B18345CA-C7DC-0E84-D8BD-E5A64B3A9875}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DA9EE9DD-FC4D-4130-9BB1-1904A2595368}
+	EndGlobalSection
+EndGlobal
