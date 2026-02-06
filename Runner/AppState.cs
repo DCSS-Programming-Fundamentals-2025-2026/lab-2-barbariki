@@ -13,6 +13,26 @@ public class AppState
         
         repo.Deliveries.Add(new Delivery(title));
     }
+
+    public void updateDelivary(DeliveryRepository repo)
+    {
+        string title = getTitleFromUser();
+        
+        Delivery delivery = repo.Deliveries.Find(del => del.Title == title);
+        
+        if (delivery != null)
+        {
+
+            Console.Write($"Enter new title: ");
+            string newTitle = getTitleFromUser();
+            
+            Console.WriteLine($"Delivery {delivery.Title} updated to {newTitle}");
+            
+            delivery.Title = newTitle;
+        }
+
+        Console.WriteLine("Delivery not found!");
+    }
     public string getTitleFromUser()
     {
         while (true)
@@ -29,6 +49,8 @@ public class AppState
             return title;
         }
     }
+    
+    
 
     public async void sendDelivery(DeliveryRepository repo)
     {
