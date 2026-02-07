@@ -43,17 +43,15 @@ public class AppState
         {
             ShowAllDeliviries();
             Console.WriteLine();
-            string title = getTitleFromUser();
 
-            Delivery delivery = Repository.Deliveries.Find(del => del.Title == title);
-            if (delivery == null) delivery = Repository.Departured.Find(del => del.Title == title);
-            if (delivery == null) delivery = Repository.Delivered.Find(del => del.Title == title);
+            Delivery delivery = findDelivery();
 
             if (delivery != null)
             {
                 Console.WriteLine("Delivery found.\n");
                 Console.WriteLine("----------------------");
-                string answer = null;
+                string answer = string.Empty;
+                
                 while (true)
                 {
                     Console.WriteLine("Delete(1) or change status(2)?");
@@ -65,17 +63,12 @@ public class AppState
                     }
                     else break;
                 }
-                if (delivery.Status == DeliveryStatus.Packing) Repository.Deliveries.Remove(delivery);
-                else if (delivery.Status == DeliveryStatus.Departure) Repository.Departured.Remove(delivery);
-                else if (delivery.Status == DeliveryStatus.Delivered) Repository.Delivered.Remove(delivery);
+                
+                addOrDeleteDelivery(delivery, DeliveryAction.Delete);
+                
                 if (answer == "2")
                 {
-                    delivery.Status = (DeliveryStatus)getStatusFromUser();
-
-                    if (delivery.Status == DeliveryStatus.Packing) Repository.Deliveries.Add(delivery);
-                    else if (delivery.Status == DeliveryStatus.Departure) Repository.Departured.Add(delivery);
-                    else if (delivery.Status == DeliveryStatus.Delivered) Repository.Delivered.Add(delivery);
-                    
+                    addOrDeleteDelivery(delivery, DeliveryAction.Add);
                     Console.WriteLine("Successfully updated.");
                 }
             }
@@ -149,5 +142,34 @@ public class AppState
             else { Console.WriteLine("Delivery not found."); }
         }
         else { Console.WriteLine("There are no deliviries"); }
+    }
+    
+    public Delivery findDelivery()
+    {
+        string title = getTitleFromUser();
+        Delivery delivery = Repository.Deliveries.Find(del => del.Title == title);
+        if (delivery == null) delivery = Repository.Departured.Find(del => del.Title == title);
+        if (delivery == null) delivery = Repository.Delivered.Find(del => del.Title == title);
+        
+        return delivery;
+    }
+    
+    public void addOrDeleteDelivery(Delivery delivery, DeliveryAction action)
+    {
+        if (action == DeliveryAction.Add)
+        {
+            if (delivery.Status == DeliveryStatus.Packing) Repository.Deliveries.Add(delivery);
+            else if (delivery.Status == DeliveryStatus.Departure) Repository.Departured.Add(delivery);
+            else if (delivery.Status == DeliveryStatus.Delivered) Repository.Delivered.Add(delivery);
+            
+        }
+        else if (action == DeliveryAction.Delete)
+        {
+            delivery.Status = (DeliveryStatus)getStatusFromUser();
+            
+            if (delivery.Status == DeliveryStatus.Packing) Repository.Deliveries.Remove(delivery);
+            else if (delivery.Status == DeliveryStatus.Departure) Repository.Departured.Remove(delivery);
+            else if (delivery.Status == DeliveryStatus.Delivered) Repository.Delivered.Remove(delivery);
+        }
     }
 }
