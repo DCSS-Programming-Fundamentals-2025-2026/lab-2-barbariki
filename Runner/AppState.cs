@@ -24,7 +24,7 @@ public class AppState
     {
         if (deliveries.Count != 0)
         {
-            Console.WriteLine("Packing:");
+            Console.WriteLine($"{char.ToUpper(title[0]) + title.Substring(1)}:");
             
             for (int i = 0; i < deliveries.Count; i++)
             {
