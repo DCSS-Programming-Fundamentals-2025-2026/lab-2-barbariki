@@ -3,10 +3,17 @@ namespace Runner;
 using Enums;
 using DeliveryRepository;
 using Delivery;
+using DayData;
+using System.Text.Json;
+using System.Transactions;
 
 public class AppState
 {
-    public DeliveryRepository Repository = new DeliveryRepository();
+    public DeliveryRepository Repository;
+    public List<DayData> DaysStorage;
+    public DayData CurrentDay;
+    public string DayFileName { get; set; } = $@"{Path.Combine(Directory.GetCurrentDirectory(), @"Data\DayData.json")}";
+    public string RepositoryFileName { get; set; } = $@"{Path.Combine(Directory.GetCurrentDirectory(), @"Data\RepositoryData.json")}";
     public void createDelivery()
     {
         string title = getTitleFromUser();
@@ -25,7 +32,7 @@ public class AppState
         if (deliveries.Count != 0)
         {
             Console.WriteLine($"{char.ToUpper(title[0]) + title.Substring(1)}:");
-            
+
             for (int i = 0; i < deliveries.Count; i++)
             {
                 Console.WriteLine($"{i + 1}. {deliveries[i].Title}.");
@@ -36,7 +43,12 @@ public class AppState
             Console.WriteLine($"There are no {title} deliviries");
         }
     }
-    
+    public AppState()
+    {
+        Repository = GetRepositoryData();
+        DaysStorage = GetDayData();
+        CurrentDay = new DayData(DaysStorage.Count + 1);
+    }
     public void updateDelivery()
     {
         if (Repository.Deliveries.Count != 0 || Repository.Delivered.Count != 0 || Repository.Departured.Count != 0)
@@ -51,7 +63,7 @@ public class AppState
                 Console.WriteLine("Delivery found.\n");
                 Console.WriteLine("----------------------");
                 string answer = string.Empty;
-                
+
                 while (true)
                 {
                     Console.WriteLine("Delete(1) or change status(2)?");
@@ -63,9 +75,9 @@ public class AppState
                     }
                     else break;
                 }
-                
+
                 addOrDeleteDelivery(delivery, DeliveryAction.Delete);
-                
+
                 if (answer == "2")
                 {
                     addOrDeleteDelivery(delivery, DeliveryAction.Add);
@@ -137,40 +149,92 @@ public class AppState
                 Repository.Deliveries.Remove(delivery);
                 delivery.Status = DeliveryStatus.Departure;
                 Repository.Departured.Add(delivery);
+                CurrentDay.AmountOfDepartured++;
                 Console.WriteLine("Successfully sent.");
             }
             else { Console.WriteLine("Delivery not found."); }
         }
         else { Console.WriteLine("There are no deliviries"); }
     }
-    
+
     public Delivery findDelivery()
     {
         string title = getTitleFromUser();
         Delivery delivery = Repository.Deliveries.Find(del => del.Title == title);
         if (delivery == null) delivery = Repository.Departured.Find(del => del.Title == title);
         if (delivery == null) delivery = Repository.Delivered.Find(del => del.Title == title);
-        
+
         return delivery;
     }
-    
+
     public void addOrDeleteDelivery(Delivery delivery, DeliveryAction action)
     {
         if (action == DeliveryAction.Add)
         {
             delivery.Status = (DeliveryStatus)getStatusFromUser();
-            
+
             if (delivery.Status == DeliveryStatus.Packing) Repository.Deliveries.Add(delivery);
             else if (delivery.Status == DeliveryStatus.Departure) Repository.Departured.Add(delivery);
             else if (delivery.Status == DeliveryStatus.Delivered) Repository.Delivered.Add(delivery);
-            
+
         }
         else if (action == DeliveryAction.Delete)
         {
-            
+
             if (delivery.Status == DeliveryStatus.Packing) Repository.Deliveries.Remove(delivery);
             else if (delivery.Status == DeliveryStatus.Departure) Repository.Departured.Remove(delivery);
             else if (delivery.Status == DeliveryStatus.Delivered) Repository.Delivered.Remove(delivery);
         }
+    }
+    public void showDayResult(DayData day)
+    {
+        Console.WriteLine($"Day {day.DayCounter} result: {day.AmountOfDepartured} departured deliveries.");
+    }
+    public void showAllDaysResult()
+    {
+        for (int i = 0; i < DaysStorage.Count; i++)
+        {
+            showDayResult(DaysStorage[i]);
+        }
+    }
+    public void NextDay()
+    {
+        DaysStorage.Add(CurrentDay);
+        SaveDayData();
+        CurrentDay = new DayData(DaysStorage[DaysStorage.Count - 1].DayCounter + 1);
+    }
+    public void SaveDayData()
+    {
+        string json = JsonSerializer.Serialize(DaysStorage);
+        File.WriteAllText(DayFileName, json);
+    }
+    public List<DayData> GetDayData()
+    {
+        if (File.Exists(DayFileName))
+        {
+            string json = File.ReadAllText(DayFileName);
+            if (!string.IsNullOrWhiteSpace(json))
+            {
+                return JsonSerializer.Deserialize<List<DayData>>(json);
+            }
+        }
+        return new List<DayData>();
+    }
+    public void SaveRepositoryData()
+    {
+        string json = JsonSerializer.Serialize(Repository);
+        File.WriteAllText(RepositoryFileName, json);
+    }
+    public DeliveryRepository GetRepositoryData()
+    {
+        if (File.Exists(RepositoryFileName))
+        {
+            string json = File.ReadAllText(RepositoryFileName);
+            if (!string.IsNullOrWhiteSpace(json))
+            {
+                return JsonSerializer.Deserialize<DeliveryRepository>(json);
+            }
+        }
+        return new DeliveryRepository();
     }
 }

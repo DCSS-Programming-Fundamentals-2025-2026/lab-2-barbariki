@@ -15,4 +15,5 @@ public class Delivery : TaskBase
         Status = DeliveryStatus.Packing;
         Priority = this.getPriorityKey(intPriority);
     }
+    public Delivery() { }
 }

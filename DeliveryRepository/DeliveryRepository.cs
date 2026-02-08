@@ -4,9 +4,10 @@ using Delivery;
 
 public class DeliveryRepository
 {
-    public List<Delivery> Deliveries = new List<Delivery>();
-    public List<Delivery> Departured = new List<Delivery>();
-    public List<Delivery> Delivered = new List<Delivery>();
+    public List<Delivery> Deliveries { get; set; } = new List<Delivery>();
+    public List<Delivery> Departured { get; set; } = new List<Delivery>();
+    public List<Delivery> Delivered { get; set; } = new List<Delivery>();
+    public DeliveryRepository() { }
     public Delivery Find(string title)
     {
         try
@@ -21,6 +22,6 @@ public class DeliveryRepository
     }
     public void Sort()
     {
-        
+
     }
 }

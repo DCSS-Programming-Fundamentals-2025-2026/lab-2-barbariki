@@ -6,7 +6,7 @@ public class Menu
     {
         "Add Delivery", "Update delivery", "Show All deliveries",
         "Show all undelivered", "Send delivery", "Sort by priority", 
-        "Day result", "Next day", "Exit"
+        "Day result", "Next day", "Show all days result", "Exit"
     };
 
     public static void printMenu()
