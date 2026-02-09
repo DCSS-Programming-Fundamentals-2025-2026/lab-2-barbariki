@@ -5,7 +5,6 @@ using DeliveryRepository;
 using Delivery;
 using DayData;
 using System.Text.Json;
-using System.Transactions;
 
 public class AppState
 {
@@ -188,10 +187,11 @@ public class AppState
     }
     public void showDayResult(DayData day)
     {
-        Console.WriteLine($"Day {day.DayCounter} result: {day.AmountOfDepartured} departured deliveries.");
+        Console.WriteLine($"Day {day.DayCounter}: {day.AmountOfDepartured} departured deliveries.");
     }
     public void showAllDaysResult()
     {
+        Console.WriteLine("Results:");
         for (int i = 0; i < DaysStorage.Count; i++)
         {
             showDayResult(DaysStorage[i]);
@@ -202,6 +202,7 @@ public class AppState
         DaysStorage.Add(CurrentDay);
         SaveDayData();
         CurrentDay = new DayData(DaysStorage[DaysStorage.Count - 1].DayCounter + 1);
+        Console.WriteLine("The next day came.");
     }
     public void SaveDayData()
     {
