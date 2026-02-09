@@ -11,8 +11,21 @@ public class AppState
     public DeliveryRepository Repository;
     public List<DayData> DaysStorage;
     public DayData CurrentDay;
-    public string DayFileName { get; set; } = $@"{Path.Combine(Directory.GetCurrentDirectory(), @"Data", @"DayData.json")}";
-    public string RepositoryFileName { get; set; } = $@"{Path.Combine(Directory.GetCurrentDirectory(), @"Data", @"RepositoryData.json")}";
+    
+    public string DataDirectory { get; set; } = Path.Combine(
+        AppContext.BaseDirectory,
+        "Data"
+    );
+    public string DayFileName { get; set; } = Path.Combine(
+        AppContext.BaseDirectory,
+        "Data",
+        "DayData.json"
+    );
+    public string RepositoryFileName { get; set; } = Path.Combine(
+        AppContext.BaseDirectory,
+        "Data",
+        "RepositoryData.json"
+    );
     public void createDelivery()
     {
         string title = getTitleFromUser();
@@ -206,6 +219,7 @@ public class AppState
     }
     public void SaveDayData()
     {
+        EnsureDataDirectoryExists();
         string json = JsonSerializer.Serialize(DaysStorage);
         File.WriteAllText(DayFileName, json);
     }
@@ -223,6 +237,7 @@ public class AppState
     }
     public void SaveRepositoryData()
     {
+        EnsureDataDirectoryExists();
         string json = JsonSerializer.Serialize(Repository);
         File.WriteAllText(RepositoryFileName, json);
     }
@@ -238,4 +253,11 @@ public class AppState
         }
         return new DeliveryRepository();
     }
+    
+    private void EnsureDataDirectoryExists()
+    {
+        var dataDir = Path.Combine(AppContext.BaseDirectory, "Data");
+        Directory.CreateDirectory(dataDir);
+    }
+
 }
