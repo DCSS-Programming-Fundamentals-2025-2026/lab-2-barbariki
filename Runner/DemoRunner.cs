@@ -21,7 +21,7 @@ public class DemoRunner
                 case ("3"): data.ShowAllDeliviries(); break;
                 case ("4"): data.showDeliveries(data.Repository.Deliveries, "packing"); break;
                 case ("5"): data.sendDelivery(); break;
-                case ("6"): break;
+                case ("6"): data.QuickSortByPriority(data.Repository.Deliveries, 0, data.Repository.Deliveries.Count - 1); break;
                 case ("7"): data.showDayResult(data.CurrentDay); break;
                 case ("8"): data.NextDay(); break;
                 case ("9"): data.showAllDaysResult(); break;

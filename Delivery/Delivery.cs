@@ -16,4 +16,9 @@ public class Delivery : TaskBase
         Priority = this.getPriorityKey(intPriority);
     }
     public Delivery() { }
+
+    public override string ToString()
+    {
+        return $"{Title} - {Priority}";
+    }
 }

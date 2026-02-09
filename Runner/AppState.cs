@@ -47,7 +47,7 @@ public class AppState
 
             for (int i = 0; i < deliveries.Count; i++)
             {
-                Console.WriteLine($"{i + 1}. {deliveries[i].Title}.");
+                Console.WriteLine($"{i + 1}. {deliveries[i]}.");
             }
         }
         else
@@ -258,6 +258,43 @@ public class AppState
     {
         var dataDir = Path.Combine(AppContext.BaseDirectory, "Data");
         Directory.CreateDirectory(dataDir);
+    }
+    
+    public void QuickSortByPriority(List<Delivery> deliveries, int left, int right)
+    {
+        if (left < right)
+        {
+            int pivotIndex = Partition(deliveries, left, right);
+            
+            QuickSortByPriority(deliveries, left, pivotIndex);
+            QuickSortByPriority(deliveries, pivotIndex + 1, right);
+        }
+    }
+
+    private int Partition(List<Delivery> deliveries, int left, int right)
+    {
+        int pivotValue = (int)deliveries[(left + right) / 2].Priority;
+        int i = left - 1;
+        int j = right + 1;
+
+        while (true)
+        {
+            do
+            {
+                i++;
+            } while ((int)deliveries[i].Priority < pivotValue);
+
+            do
+            {
+                j--;
+            } while ((int)deliveries[j].Priority > pivotValue);
+
+            if (i >= j) return j;
+            
+            var temp = deliveries[i];
+            deliveries[i] = deliveries[j];
+            deliveries[j] = temp;
+        }
     }
 
 }
