@@ -244,7 +244,6 @@ public class AppState
                 {
                     return new List<DayData>();
                 }
-                
             }
         }
         return new List<DayData>();
