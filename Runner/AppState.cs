@@ -233,9 +233,18 @@ public class AppState
         if (File.Exists(dayFileName))
         {
             string json = File.ReadAllText(dayFileName);
+            
             if (!string.IsNullOrWhiteSpace(json))
             {
-                return JsonSerializer.Deserialize<List<DayData>>(json);
+                try
+                {
+                    return JsonSerializer.Deserialize<List<DayData>>(json);
+                }
+                catch (Exception)
+                {
+                    return new List<DayData>();
+                }
+                
             }
         }
         return new List<DayData>();
@@ -253,7 +262,14 @@ public class AppState
             string json = File.ReadAllText(repositoryFileName);
             if (!string.IsNullOrWhiteSpace(json))
             {
-                return JsonSerializer.Deserialize<DeliveryRepository>(json);
+                try
+                {
+                    return JsonSerializer.Deserialize<DeliveryRepository>(json);
+                }
+                catch (Exception)
+                {
+                    return new DeliveryRepository();
+                }
             }
         }
         return new DeliveryRepository();
@@ -275,7 +291,6 @@ public class AppState
             QuickSortByPriority(deliveries, pivotIndex + 1, right);
         }
     }
-
     private int Partition(List<Delivery> deliveries, int left, int right)
     {
         int pivotValue = (int)deliveries[(left + right) / 2].priority;
