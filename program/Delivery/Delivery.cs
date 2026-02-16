@@ -4,7 +4,7 @@ using Enums;
 using Interfaces;
 using Task;
 
-public class Delivery : TaskBase
+public class Delivery: TaskBase
 {
     public PriorityKey priority { get; set; }
     public DeliveryStatus status { get; set; }

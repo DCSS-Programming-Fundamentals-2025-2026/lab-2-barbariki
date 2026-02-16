@@ -73,7 +73,9 @@ public class AppState
             ShowAllDeliviries();
             Console.WriteLine();
 
-            Delivery delivery = FindDelivery();
+            string title = GetTitleFromUser();
+            
+            Delivery delivery = FindDelivery(title);
 
             if (delivery != null)
             {
@@ -115,11 +117,14 @@ public class AppState
         {
             Console.WriteLine("1 - Packing.\n2 - Departue.\n3 - Delivered.");
             Console.Write("Enter key: ");
+            
             string text = Console.ReadLine();
+            
             if (text == "1" || text == "2" || text == "3")
             {
                 return int.Parse(text);
             }
+            
             Console.WriteLine("Wrong input!\nTry again.");
         }
     }
@@ -145,11 +150,14 @@ public class AppState
         {
             Console.WriteLine("1 - Important.\n2 - Not much.\n3 - Poop.");
             Console.Write("Enter key: ");
+            
             string text = Console.ReadLine();
+            
             if (text == "1" || text == "2" || text == "3")
             {
                 return int.Parse(text);
             }
+            
             Console.WriteLine("Wrong input!\nTry again.");
         }
     }
@@ -159,6 +167,7 @@ public class AppState
         {
             ShowDeliveries(repository.deliveries, "packing");
             string text = GetTitleFromUser();
+            
             Delivery delivery = repository.deliveries.Find(del => del.title == text);
 
             if (delivery != null)
@@ -174,9 +183,8 @@ public class AppState
         else { Console.WriteLine("There are no deliviries"); }
     }
 
-    public Delivery FindDelivery()
+    public Delivery FindDelivery(string title)
     {
-        string title = GetTitleFromUser();
         Delivery delivery = repository.deliveries.Find(del => del.title == title);
         if (delivery == null) delivery = repository.departured.Find(del => del.title == title);
         if (delivery == null) delivery = repository.delivered.Find(del => del.title == title);
@@ -274,10 +282,12 @@ public class AppState
         return new DeliveryRepository();
     }
 
-    private void EnsureDataDirectoryExists()
+    public void EnsureDataDirectoryExists()
     {
-        var dataDir = Path.Combine(dataDirectory);
-        Directory.CreateDirectory(dataDir);
+        if (!Directory.Exists(dataDirectory))
+        {
+            Directory.CreateDirectory(dataDirectory);
+        }
     }
 
     public void QuickSortByPriority(List<Delivery> deliveries, int left, int right)

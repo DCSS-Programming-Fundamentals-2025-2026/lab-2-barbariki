@@ -5,7 +5,7 @@ VisualStudioVersion = 17.5.2.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab-1-barbariki", "program\lab-1-barbariki.csproj", "{14F6FBBB-AF0F-46A7-9DBC-8A58886EA169}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "program-test", "program-test\program-test.csproj", "{6EE3EC0D-38D2-44AD-80B6-7545CA5BEA77}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "lab-1-barbariki.Tests", "lab-1-barbariki.Tests\lab-1-barbariki.Tests.csproj", "{6EE3EC0D-38D2-44AD-80B6-7545CA5BEA77}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
