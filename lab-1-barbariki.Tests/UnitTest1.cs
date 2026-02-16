@@ -3,12 +3,14 @@
 using Runner;
 using Delivery;
 using Enums;
+using DayData;
+using DeliveryRepository;
 
 public class Tests
 {
 
-    [Test]
-    public void CreateDeliveryAndAddsToRepository()
+    [Test] // - unit test
+    public void Create_DeliveryAndAddsToRepository()
     {
         // Arrange
         AppState appState = new AppState();
@@ -22,8 +24,8 @@ public class Tests
         Assert.That(appState.repository.deliveries[initialCount].title, Is.EqualTo("Test"));
     }
 
-    [Test]
-    public void DeleteDelivery()
+    [Test] // - integration test
+    public void Delete_Delivery()
     {
         // Arrange 
         AppState appState = new AppState();
@@ -38,7 +40,7 @@ public class Tests
         Assert.That(appState.repository.deliveries.Count, Is.EqualTo(0));
     }
 
-    [Test]
+    [Test] // - unit test
     public void QuickSortByPrioritySortsCorrectly()
     {
         // Arrange
@@ -59,8 +61,8 @@ public class Tests
         Assert.That(deliveries[2].title, Is.EqualTo("Low"));
     }
 
-    [Test]
-    public void FindDeliveryTest()
+    [Test] // - integration test
+    public void Find_DeliveryTest_Returns_Delivery()
     {
         // Arrange 
         AppState appState = new AppState();
@@ -74,8 +76,8 @@ public class Tests
         Assert.That(delivery.title, Is.EqualTo(title));
     }
     
-    [Test]
-    public void saveRepositoryDataTest()
+    [Test] // - integration test
+    public void Save_RepositoryDataInFile()
     {
         // Arrange
         AppState appState = new AppState();
@@ -86,24 +88,26 @@ public class Tests
         
         // Assert
         Assert.That(File.Exists(appState.repositoryFileName), Is.True);
-    } // 
+        Assert.That(appState.GetRepositoryData().deliveries[0].title, Is.EqualTo("Test"));
+    }
     
-    [Test]
-    public void saveDayDataTest()
+    [Test] // - integration test
+    public void Save_DayDataInFile()
     {
         // Arrange
         AppState appState = new AppState();
         
         // Act
-        appState.repository.deliveries.Add(new Delivery("Test", 1));
+        appState.currentDay.AmountOfDepartured = 1;
         appState.SaveDayData();
         
         // Assert
-        Assert.That(File.Exists(appState.dayFileName), Is.True); // 
+        Assert.That(File.Exists(appState.dayFileName), Is.True);
+        Assert.That(appState.GetDayData()[0].AmountOfDepartured, Is.EqualTo(1));
     }
 
-    [Test]
-    public void GetRepositoryDataTest()
+    [Test] // - integration test
+    public void Get_RepositoryData_Returns_List()
     {
         // Arrange
         AppState appState = new AppState();
@@ -111,29 +115,29 @@ public class Tests
         // Act
         appState.repository.deliveries.Add(new Delivery("Test", 1));
         appState.SaveRepositoryData();
-        appState.GetRepositoryData();
+        DeliveryRepository deliveryRepository = appState.GetRepositoryData();
         
         // Assert
-        Assert.That(appState.repository.deliveries[0].title, Is.EqualTo("Test"));
+        Assert.That(deliveryRepository.deliveries[0].title, Is.EqualTo("Test"));
     }
     
-    [Test]
-    public void GetDayDataTest()
+    [Test] // - integration test
+    public void Get_DayData_Returns_List()
     {
         // Arrange
         AppState appState = new AppState();
         
         // Act
-        appState.repository.deliveries.Add(new Delivery("Test", 1));
+        appState.currentDay.AmountOfDepartured = 1;
         appState.SaveDayData();
-        appState.GetDayData();
+        List<DayData> daysStorage = appState.GetDayData();
         
         // Assert
-        Assert.That(appState.daysStorage.Count, !Is.EqualTo(0)); // 
+        Assert.That(daysStorage[0].AmountOfDepartured, Is.EqualTo(1));
     }
 
     [Test] // - unit test
-    public void EnsureDataDirCreatedTest()
+    public void EnsureDataDirCreated()
     {
         // Arrange
         AppState appState = new AppState();
@@ -147,7 +151,7 @@ public class Tests
     }
     
     [TearDown]
-    public void Cleanup()
+    public void CleanUp()
     {
         var dataDir = Path.Combine(AppContext.BaseDirectory, "Data");
 
@@ -163,7 +167,7 @@ public class Tests
     }
 
     [Test]
-    public void Next_Day_Test()
+    public void Set_NextDay()
     {
         // Arrange
         AppState appState = new AppState();
