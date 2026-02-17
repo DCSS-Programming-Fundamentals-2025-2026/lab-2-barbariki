@@ -37,7 +37,7 @@ public class Sort
         Assert.That(deliveries[2].title, Is.EqualTo("Low"));
     }
 
-    [Test] // - unit test
+    [Test] // - unit test (edge-case test)
     public void QuickSortByPrioritySortsCorrectly_When_PriorityIsTheSame()
     {
         // Arrange

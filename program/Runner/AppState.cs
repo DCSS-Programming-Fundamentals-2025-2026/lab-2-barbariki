@@ -267,24 +267,29 @@ public class AppState
     }
     public List<DayData> GetDayData()
     {
-        if (File.Exists(dayFileName))
+        if (!File.Exists(dayFileName))
         {
-            string json = File.ReadAllText(dayFileName);
-            
-            if (!string.IsNullOrWhiteSpace(json))
-            {
-                try
-                {
-                    return JsonSerializer.Deserialize<List<DayData>>(json);
-                }
-                catch (Exception)
-                {
-                    return new List<DayData>();
-                }
-            }
+            return new List<DayData>();
         }
-        return new List<DayData>();
+        
+        string json = File.ReadAllText(dayFileName);
+            
+        if (string.IsNullOrWhiteSpace(json))
+        {
+            return new List<DayData>();
+        }
+        
+        try
+        {
+            return JsonSerializer.Deserialize<List<DayData>>(json);
+        }
+        catch (Exception)
+        {
+            return new List<DayData>();
+        }
+        
     }
+    
     public void SaveRepositoryData()
     {
         EnsureDataDirectoryExists();
