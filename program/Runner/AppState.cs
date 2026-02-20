@@ -233,7 +233,7 @@ public class AppState
             QuickSortByPriority(deliveries, pivotIndex + 1, right);
         }
     }
-    
+
     private int Partition(List<Delivery> deliveries, int left, int right)
     {
         int pivotValue = (int)deliveries[(left + right) / 2].priority;

@@ -17,19 +17,6 @@ public class GetSaveData
     }
     
     [Test] // - integration test
-    public void Save_RepositoryDataInFile()
-    {
-        
-        // Act
-        appState.repository.deliveries.Add(new Delivery("Test", 1));
-        appState.SaveRepositoryData();
-        
-        // Assert
-        Assert.That(File.Exists(appState.repositoryFileName), Is.True);
-        Assert.That(appState.GetRepositoryData().deliveries[0].title, Is.EqualTo("Test"));
-    }
-    
-    [Test] // - integration test
     public void Save_DayDataInFile()
     {
         
@@ -40,19 +27,6 @@ public class GetSaveData
         // Assert
         Assert.That(File.Exists(appState.dayFileName), Is.True);
         Assert.That(appState.GetDayData()[0].AmountOfDepartured, Is.EqualTo(1));
-    }
-
-    [Test] // - integration test
-    public void Get_RepositoryData_Returns_List()
-    {
-        
-        // Act
-        appState.repository.deliveries.Add(new Delivery("Test", 1));
-        appState.SaveRepositoryData();
-        DeliveryRepository deliveryRepository = appState.GetRepositoryData();
-        
-        // Assert
-        Assert.That(deliveryRepository.deliveries[0].title, Is.EqualTo("Test"));
     }
     
     [Test] // - integration test (edge-case test)

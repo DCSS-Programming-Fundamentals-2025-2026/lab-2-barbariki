@@ -28,7 +28,6 @@ public class GetSaveData
     [Test] // - unit test
     public void Set_NextDay()
     {
-        
         //Act
         appState.NextDay();
         

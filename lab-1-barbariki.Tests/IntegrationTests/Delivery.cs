@@ -20,14 +20,41 @@ public class DeliveryTest
     {
         // Arrange 
         string title = "Test";
+        int priorityKey = (int)PriorityKey.Important;
         
         // Act
-        appState.repository.deliveries.Add(new Delivery(title, 1));
+        appState.CreateDelivery(title, priorityKey);
         Delivery delivery = appState.FindDelivery(title);
         appState.DeleteDelivery(delivery);
         
         // Assert
         Assert.That(appState.repository.deliveries.count, Is.EqualTo(0));
+    }
+    
+    [Test] // - integration test (edge-case test)
+    public void Delete_NullDelivery()
+    {
+        // Act
+        appState.DeleteDelivery(null);
+        
+        // Assert
+        Assert.That(appState.repository.deliveries.count, Is.EqualTo(0));
+    }
+    
+    [Test] // - integration test
+    public void Update_Delivery()
+    {
+        // Arrange 
+        string title = "Test";
+        int priorityKey = (int)PriorityKey.Important;
+        
+        // Act
+        appState.CreateDelivery(title, priorityKey);
+        Delivery delivery = appState.FindDelivery(title);
+        appState.UpdateDelivery(delivery, (int)DeliveryStatus.Departure);
+        
+        // Assert
+        Assert.That(appState.repository.departured[0].status, Is.EqualTo(DeliveryStatus.Departure));
     }
     
     [Test] // - integration test
@@ -39,9 +66,9 @@ public class DeliveryTest
         string DeliveryInDeliveredTitle = "Test2";
         
         // Act
-        appState.repository.deliveries.Add(new Delivery(DeliveryInDeliveriesTitle, 1));
-        appState.repository.departured.Add(new Delivery(DeliveryInDeparturedTitle, 1));
-        appState.repository.delivered.Add(new Delivery(DeliveryInDeliveredTitle, 1));
+        appState.CreateDelivery(DeliveryInDeliveriesTitle, 1);
+        appState.CreateDelivery(DeliveryInDeparturedTitle, 1);
+        appState.CreateDelivery(DeliveryInDeliveredTitle, 1);
         Delivery delivery1 = appState.FindDelivery(DeliveryInDeliveriesTitle);
         Delivery delivery2 = appState.FindDelivery(DeliveryInDeparturedTitle);
         Delivery delivery3 = appState.FindDelivery(DeliveryInDeliveredTitle);
@@ -60,7 +87,7 @@ public class DeliveryTest
         string title = "Test";
         
         // Act
-        appState.repository.deliveries.Add(new Delivery(title, 1));
+        appState.CreateDelivery(title, 1);
         Delivery delivery = appState.FindDelivery("421");
         
         // Assert

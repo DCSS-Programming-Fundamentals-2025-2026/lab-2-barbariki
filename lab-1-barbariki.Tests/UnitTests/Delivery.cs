@@ -1,3 +1,5 @@
+using Enums;
+
 namespace program_test.UnitTests;
 
 using Runner;
@@ -18,13 +20,30 @@ public class DeliveryTest
     public void Create_DeliveryAndAddsToRepository()
     {
         // Arrange
-        int initialCount = appState.repository.deliveries.count;
+
+        string title = "Test";
+        int priorityKey = (int)PriorityKey.Important;
 
         // Act
-        appState.repository.deliveries.Add(new Delivery("Test", 1));
+        appState.CreateDelivery(title, priorityKey);
 
         // Assert
-        Assert.That(appState.repository.deliveries.count, Is.EqualTo(initialCount + 1));
-        Assert.That(appState.repository.deliveries[initialCount].title, Is.EqualTo("Test"));
+
+        Assert.That(appState.repository.deliveries.count, Is.EqualTo(1));
+        Assert.That(appState.repository.deliveries[0].title, Is.EqualTo("Test"));
+    }
+
+    [Test] // - unit test
+    public void Send_Delivery()
+    {
+        // Arrange
+        string title = "Test";
+        int priorityKey = (int)PriorityKey.Important;
+
+        // Act
+        appState.SendDelivery(new Delivery(title, priorityKey));
+
+        // Assert
+        Assert.That(appState.repository.departured.count, Is.EqualTo(1));
     }
 }
